@@ -4,6 +4,9 @@ const resultsDisplay = document.querySelector('.results')
 const width = 15
 const aliensRemoved = []
 let currentShooterIndex = 202
+let invadersId
+let isGoingRight = true
+let direction = 1
 
 for(let i = 0; i < width * width; i++){
     const square = document.createElement('div')
@@ -53,6 +56,25 @@ document.addEventListener('keydown', moveShooter)
 function moveInvaders(){
     const leftEdge = alienInvaders[0] % width === 0
     const rightEdge = alienInvaders[alienInvaders.length - 1] % width === width - 1
-
     remove()
+    
+    if(rightEdge && isGoingRight){
+        for (let i = 0; i < alienInvaders.length; i++){
+            alienInvaders[i] += width + 1
+            direction = -1
+            isGoingRight = false 
+        }
+    }
+    if(leftEdge && !isGoingRight){
+        for (let i = 0; i < alienInvaders.length; i++){
+            alienInvaders[i] += width - 1
+            direction = 1
+            isGoingRight = true 
+        }
+    }
+    for (let i = 0; i < alienInvaders.length; i++){
+        alienInvaders[i] += direction
+    }
+    draw()
 }
+invadersId = setInterval(moveInvaders, 400)
